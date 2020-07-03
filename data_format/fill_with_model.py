@@ -56,6 +56,6 @@ sql = "create_edge(6, ${0}, ${1}, True, '${2}')"
 sql = "create_node(3, '${0}', '${1}')"
 sql = "d.node(name='${0}', label='${0}', color='red', style='filled')"
 sql = "d.node(name='${0}', label='${0}', width='${1}', height='${1}')"
-sql = "d.edge('${0}', '${1}', label='${2}%')"
 sql = "'${0}',"
+sql = "d.edge('${0}', '${1}', label='${2}%')"
 fill_with_tsv(sys.argv[1], sql)

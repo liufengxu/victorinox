@@ -1,3 +1,10 @@
+[fill_with_model.py]
+python fill_with_model.py test_fill_with_model.txt
 用于生成多行类似的文本
 讲tsv、csv或类似格式的数据作为输入
 填充到指定的模板中，直接输出
+
+[xy2matrix.py]
+python xy2matrix.py test_xy2matrix.txt
+用于把元素形式的文件转成矩阵形式的文件
+输入输出均为csv格式数据
