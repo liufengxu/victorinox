@@ -128,27 +128,28 @@ plt.xticks(range(X_train.shape[1]), indices)
 plt.xlim([-1, X_train.shape[1]])
 plt.show()
 
+print("start")
 # xgboost
-param_test1 = {
-    'max_depth': range(3, 10, 2),
-    'min_child_weight': range(1, 6, 2)}
-param_test2 = {
-    'gamma': [i / 10.0 for i in range(0, 5)]}
-param_test3 = {
-    'subsample': [i / 10.0 for i in range(6, 10)],
-    'colsample_bytree': [i / 10.0 for i in range(6, 10)]}
-
-gsearch = GridSearchCV(
-    estimator=XGBClassifier(learning_rate=0.1, n_estimators=1000, max_depth=5, min_child_weight=1, gamma=0,
-                            subsample=0.8, colsample_bytree=0.8, objective='binary:logistic', nthread=1,
-                            scale_pos_weight=1, seed=27), param_grid=param_test1, scoring='roc_auc', n_jobs=1,
-    iid=False, cv=5)
-gsearch.fit(X_train, y_train)
-means = gsearch.cv_results_['mean_test_score']
-params = gsearch.cv_results_['params']
-print(means, params)
-# 模型最好的分数、模型最好的参数、模型最好的评估器
-print(gsearch.best_score_, gsearch.best_params_, gsearch.best_estimator_)
+# param_test1 = {
+#     'max_depth': range(3, 10, 2),
+#     'min_child_weight': range(1, 6, 2)}
+# param_test2 = {
+#     'gamma': [i / 10.0 for i in range(0, 5)]}
+# param_test3 = {
+#     'subsample': [i / 10.0 for i in range(6, 10)],
+#     'colsample_bytree': [i / 10.0 for i in range(6, 10)]}
+#
+# gsearch = GridSearchCV(
+#     estimator=XGBClassifier(learning_rate=0.1, n_estimators=1000, max_depth=5, min_child_weight=1, gamma=0,
+#                             subsample=0.8, colsample_bytree=0.8, objective='binary:logistic', nthread=1,
+#                             scale_pos_weight=1, seed=27), param_grid=param_test1, scoring='roc_auc', n_jobs=1,
+#     iid=False, cv=5)
+# gsearch.fit(X_train, y_train)
+# means = gsearch.cv_results_['mean_test_score']
+# params = gsearch.cv_results_['params']
+# print(means, params)
+# # 模型最好的分数、模型最好的参数、模型最好的评估器
+# print(gsearch.best_score_, gsearch.best_params_, gsearch.best_estimator_)
 
 model = XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
                       colsample_bytree=0.8, gamma=0, learning_rate=0.1, max_delta_step=0,
@@ -184,11 +185,14 @@ plt.grid()
 plt.title('Roc xgb')
 plt.xlabel('FPR')
 plt.ylabel('TPR')
-plt.plot(fpr_xgb, tpr_xgb, fpr_rfc, tpr_rfc, label='roc_xgb(AUC=%0.2f)' % auc)
+plt.plot(fpr_xgb, tpr_xgb, label='roc_xgb(AUC=%0.2f)' % auc)
+plt.plot(fpr_rfc, tpr_rfc, label='roc_rf(AUC=%0.2f)' % auc)
 plt.legend()
 plt.show()
 
-plt.plot(recall_xgb, precision_xgb, recall_rfc, precision_rfc, label='xgb_PR')
+plt.plot(recall_xgb, precision_xgb, label='xgb_PR')
+plt.plot(recall_rfc, precision_rfc, label='xgb_PR')
 plt.legend()
 plt.show()
+print("END")
 
