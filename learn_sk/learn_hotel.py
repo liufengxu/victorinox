@@ -191,7 +191,7 @@ plt.legend()
 plt.show()
 
 plt.plot(recall_xgb, precision_xgb, label='xgb_PR')
-plt.plot(recall_rfc, precision_rfc, label='xgb_PR')
+plt.plot(recall_rfc, precision_rfc, label='rf_PR')
 plt.legend()
 plt.show()
 print("END")
