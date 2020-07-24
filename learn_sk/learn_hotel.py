@@ -128,8 +128,10 @@ plt.xticks(range(X_train.shape[1]), indices)
 plt.xlim([-1, X_train.shape[1]])
 plt.show()
 
-print("start")
 # xgboost
+
+# GridSearchCV 可以用来寻找最优参数，但运行时间太长 
+
 # param_test1 = {
 #     'max_depth': range(3, 10, 2),
 #     'min_child_weight': range(1, 6, 2)}
@@ -194,5 +196,3 @@ plt.plot(recall_xgb, precision_xgb, label='xgb_PR')
 plt.plot(recall_rfc, precision_rfc, label='rf_PR')
 plt.legend()
 plt.show()
-print("END")
-
