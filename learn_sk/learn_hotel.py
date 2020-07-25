@@ -187,11 +187,13 @@ plt.grid()
 plt.title('Roc xgb')
 plt.xlabel('FPR')
 plt.ylabel('TPR')
+# 对比
 plt.plot(fpr_xgb, tpr_xgb, label='roc_xgb(AUC=%0.2f)' % auc)
 plt.plot(fpr_rfc, tpr_rfc, label='roc_rf(AUC=%0.2f)' % auc)
 plt.legend()
 plt.show()
 
+# 对比
 plt.plot(recall_xgb, precision_xgb, label='xgb_PR')
 plt.plot(recall_rfc, precision_rfc, label='rf_PR')
 plt.legend()
