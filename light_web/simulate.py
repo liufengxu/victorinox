@@ -9,7 +9,7 @@ d = {'guid': '865555555555', 'search_id': '29111111111111'}
 
 def simulate_post(url, para):
     data = json.dumps(para)
-    response = requests.post(url=url, data=data, timeout=40)
+    response = requests.post(url=url, data=data, timeout=40, headers={'content-type': 'application/json'})
     return response.status_code, response.text
 
 
