@@ -2,6 +2,48 @@ import lightgbm as lgb
 import pandas as pd
 from sklearn.metrics import roc_auc_score
 
+def cal_group_auc(labels, preds, user_id_list):
+    """Calculate group auc"""
+
+    print('*' * 50)
+    labels = labels.tolist()
+    # preds=preds.reset_index()
+    user_id_list = user_id_list.tolist()
+    if len(user_id_list) != len(labels):
+        raise ValueError(
+            "impression id num should equal to the sample num," \
+            "impression id num is {0}".format(len(user_id_list)))
+    group_score = defaultdict(lambda: [])
+    group_truth = defaultdict(lambda: [])
+    for idx, truth in enumerate(labels):
+        user_id = user_id_list[idx]
+        score = preds[idx]
+        truth = labels[idx]
+        group_score[user_id].append(score)
+        group_truth[user_id].append(truth)
+
+    group_flag = defaultdict(lambda: False)
+    for user_id in set(user_id_list):
+        truths = group_truth[user_id]
+        flag = False
+        for i in range(len(truths) - 1):
+            if truths[i] != truths[i + 1]:
+                flag = True
+                break
+        group_flag[user_id] = flag
+
+    impression_total = 0
+    total_auc = 0
+    #
+    for user_id in group_flag:
+        if group_flag[user_id]:
+            auc = roc_auc_score(np.asarray(group_truth[user_id]), np.asarray(group_score[user_id]))
+            total_auc += auc * len(group_truth[user_id])
+            impression_total += len(group_truth[user_id])
+    group_auc = float(total_auc) / impression_total
+    group_auc = round(group_auc, 4)
+    return group_auc
+
 
 def train(df_train, df_dev, features):
     X = df_train[features]
@@ -31,7 +73,7 @@ def test(df_test, model, features):
     y_test = df_test['label']
     y_pred = model.predict(X_test, num_iteration=model.best_iteration)
     print("test auc:", roc_auc_score(y_test, y_pred))
-    # print("test gauc:",cal_group_auc(y_test, y_pred, df_test['phone_encrypt']))
+    print("test gauc:",cal_group_auc(y_test, y_pred, df_test['guid']))
 
 
 def display_feature_importance(model):
