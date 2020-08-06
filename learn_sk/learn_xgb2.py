@@ -6,8 +6,18 @@ from sklearn.metrics import roc_auc_score
 def train(df_train, features, vaild=False):
     X = df_train[features]
     y = df_train['label']
-    xgb_train = xgb.DMatrix(X, label=y)
-    watchlist = [(xgb_train, 'train'), ]
+        if vaild:
+        # X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=seed)
+        X_train = df_train[df_train['dt'] < '2020-04-06'][features]
+        X_val = df_train[df_train['dt'] == '2020-04-06'][features]
+        y_train = df_train[df_train['dt'] < '2020-04-06']['label']
+        y_val = df_train[df_train['dt'] == '2020-04-06']['label']
+        xgb_val = xgb.DMatrix(X_val, label=y_val)
+        xgb_train = xgb.DMatrix(X_train, label=y_train)
+        watchlist = [(xgb_train, 'train'), (xgb_val, 'val')]
+    else:
+        xgb_train = xgb.DMatrix(X, label=y)
+        watchlist = [(xgb_train, 'train'), ]
     params = {
         'booster': 'gbtree',
         'objective': 'binary:logistic',
